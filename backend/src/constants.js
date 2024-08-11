@@ -1,0 +1,1 @@
+export const WHITELISTED_ADMIN_EMAILS = ["jaymistry31170@gmail.com"]
