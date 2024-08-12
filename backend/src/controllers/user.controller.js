@@ -6,7 +6,24 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { WHITELISTED_ADMIN_EMAILS } from "../constants.js";
 
 
-const generateTokens = asyncHandler(async (userid) => {
+// const generateTokens = asyncHandler(async (userid) => {
+//     const user = await User.findById(userid);
+//     if (!user) {
+//         throw new ApiError(500, "User not found while generating tokens");
+//     }
+
+//     const accessToken = await user.generateAccessToken();
+//     const refreshToken = await user.generateRefreshToken();
+
+//     console.log(accessToken, refreshToken)
+
+//     user.refreshToken = refreshToken;
+//     await user.save({ validateBeforeSave: false });
+
+//     return { accessToken, refreshToken };
+// })
+
+async function generateTokens(userid) {
     const user = await User.findById(userid);
     if (!user) {
         throw new ApiError(500, "User not found while generating tokens");
@@ -16,9 +33,10 @@ const generateTokens = asyncHandler(async (userid) => {
     const refreshToken = await user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
 
     return { accessToken, refreshToken };
-})
+}
 
 const register = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
@@ -29,7 +47,7 @@ const register = asyncHandler(async (req, res) => {
     // check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-        throw new ApiError(400, "User already exists");
+        throw new ApiError(403, "User already exists");
     }
 
     // create user
@@ -44,7 +62,7 @@ const register = asyncHandler(async (req, res) => {
         throw new ApiError(500, "User registration failed");
     }
 
-    const { accessToken, refreshToken } = generateTokens(user._id);
+    const { accessToken, refreshToken } = await generateTokens(user._id);
     const newUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!newUser) {
