@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
+import LoginComp from "../componants/Login.jsx";
 
 const Login = () => {
     return (
         <div>
-            <h1>Login</h1>
+            <LoginComp />
         </div>
     )
 }

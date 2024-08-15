@@ -4,18 +4,27 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import conf from '../conf/conf.js';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../store/userSlice.js';
 
 const Signup = () => {
     const { register, handleSubmit } = useForm();
     const [error, setError] = useState();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const submitHandler = (data) => {
         try {
             axios.post(`${conf.backendUrl}/user/register`, data, { withCredentials: true })
                 .then((res) => {
-                    console.log(res.data);
+                    if (res.status === 200) {
+                        navigate('/login');
+                        dispatch(login({ userData: res.data }));
+                    }
                 })
                 .catch((err) => {
+                    console.log(err);
                     setError(err.response.status);
                 })
         } catch (err) {
@@ -54,7 +63,7 @@ const Signup = () => {
                             <input {...register("password", { required: true })} type="password" className='bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg w-full focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='••••••••' />
                         </div>
                         <div>
-                            <button type="submit" className='dark:bg-gray-400 rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
+                            <button type="submit" className='dark:bg-gray-400 text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
                         </div>
                     </form>
                 </div>
