@@ -70,7 +70,7 @@ const register = asyncHandler(async (req, res) => {
     }
 
     return res
-        .status(201)
+        .status(200)
         .cookie("refreshToken", refreshToken, { httpOnly: true })
         .cookie("accessToken", accessToken, { httpOnly: true })
         .json(new ApiResponse(200, "User registered successfully", newUser));
@@ -83,21 +83,21 @@ const login = asyncHandler(async (req, res) => {
     }
 
     // check if user exists
-    const user = await User.findOne({ email })?.select("-password -refreshToken");
+    const user = await User.findOne({ email })?.select("-refreshToken");
     if (!user) {
-        throw new ApiError(400, "Invalid credentials");
+        throw new ApiError(401, "Invalid credentials");
     }
 
     // check if password is correct
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        throw new ApiError(400, "Invalid credentials");
+        throw new ApiError(402, "Invalid credentials");
     }
 
     const { accessToken, refreshToken } = generateTokens(user._id);
 
     return res
-        .staus(200)
+        .status(200)
         .cookie("accessToken", accessToken, { httpOnly: true })
         .cookie("refreshToken", refreshToken, { httpOnly: true })
         .json(new ApiResponse(200, "User logged in successfully", user));

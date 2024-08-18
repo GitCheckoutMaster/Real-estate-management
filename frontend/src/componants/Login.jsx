@@ -1,6 +1,35 @@
+/* eslint-disable no-unused-vars */
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import conf from '../conf/conf.js';
+import { useDispatch } from 'react-redux';
+import { login } from '../store/userSlice.js';
+import { useState } from 'react';
 
 function Login() {
+    const dispatch = useDispatch();
+    const {register, handleSubmit} = useForm();
+    const [error, setError] = useState(null);
+
+    const loginUser = (data) => {
+        axios.post(`${conf.backendUrl}/user/login`, data, { withCredentials: true })
+            .then((res) => {
+                dispatch(login({userData: res.data}));
+                setError(null);
+            })
+            .catch((err) => {
+                console.log(err);
+                if (err.response.status === 401) {
+                    setError("User does not exists");
+                } else if (err.response.status === 402) {
+                    setError("Invalid password");
+                } else {
+                    setError("Something went wrong")
+                }
+            })
+    } 
+
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col justify-center items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -13,14 +42,19 @@ function Login() {
                         <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
                             Sign in to your Account
                         </h1>
-                        <form className='space-y-4 md:space-y-6'>
+                        {
+                            error && <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
+                                {error}
+                            </div>
+                        }
+                        <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit(loginUser)}>
                             <div>
                                 <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white leading-tight'>Your email</label>
-                                <input className='rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-white focus:border-slate-900 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="text" />
+                                <input {...register("email", {required: true})} className='rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-white focus:border-slate-900 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="text" />
                             </div>
                             <div>
                                 <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white leading-tight'>Your password</label>
-                                <input className='rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-white focus:border-slate-900 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="password" />
+                                <input {...register("password", {required: true})} className='rounded-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-white focus:border-slate-900 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500' type="password" />
                             </div>
                             <div className='text-gray-900 dark:text-white flex justify-between text-sm font-medium leading-tight'>
                                 <div className='flex gap-2'>
