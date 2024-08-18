@@ -33,7 +33,7 @@ const Signup = () => {
     }
 
     return (
-        <section className='bg-gray-50 dark:bg-gray-500'>
+        <section className='bg-gray-50 dark:bg-gray-900'>
             <div className='flex flex-col gap-2 items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
                 <Link to="/">
                     <span className='text-4xl font-semibold text-white'>Real</span>
@@ -63,7 +63,7 @@ const Signup = () => {
                             <input {...register("password", { required: true })} type="password" className='bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg w-full focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='••••••••' />
                         </div>
                         <div>
-                            <button type="submit" className='dark:bg-gray-400 text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
+                            <button type="submit" className='dark:bg-blue-500 text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
                         </div>
                     </form>
                 </div>
