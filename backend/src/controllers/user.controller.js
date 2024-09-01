@@ -5,7 +5,6 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { WHITELISTED_ADMIN_EMAILS } from "../constants.js";
 
-
 // const generateTokens = asyncHandler(async (userid) => {
 //     const user = await User.findById(userid);
 //     if (!user) {
@@ -103,7 +102,48 @@ const login = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, "User logged in successfully", user));
 });
 
+const googleRegister = asyncHandler(async (req, res) => {
+    const { email, displayName } = req.body;
+    if (!email || !displayName) {
+        throw new ApiError(500, "Google registration failed (email and name is not provided by google)");
+    }
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+        throw new ApiError(403, "User already exists");
+    }
+
+    // generate random password and hash it
+    const password = Math.random().toString(36).slice(-8);
+    const hashedPass = null;
+
+    // generate user and store it
+    const user = await User.create({
+        email: email,
+        name: displayName,
+        password: password,
+        role: WHITELISTED_ADMIN_EMAILS.includes(email) ? "admin": "user",
+    })
+
+    if (!user) {
+        throw new ApiError(501, "Google registration failed (user creation failed)");
+    }
+
+    const userCreated = await User.findOne({ email })?.select("-password -refreshToken")
+    if (!userCreated) {
+        throw new ApiError(502, "Google registration failed (user not found after creation)");
+    }
+
+    const { accessToken, refreshToken } = generateTokens(userCreated._id);
+
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, { httpOnly: true })
+        .cookie("refreshToken", refreshToken, { httpOnly: true })
+        .json(new ApiResponse(200, "Google sign in successfull", userCreated));
+})
+
 export {
     register,
     login,
+    googleRegister,
 }

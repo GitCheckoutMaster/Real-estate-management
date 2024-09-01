@@ -7,6 +7,7 @@ import conf from '../conf/conf.js';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/userSlice.js';
+import GoogleAuth from './GoogleAuth.jsx';
 
 const Signup = () => {
     const { register, handleSubmit } = useForm();
@@ -66,6 +67,12 @@ const Signup = () => {
                             <button type="submit" className='dark:bg-blue-500 text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
                         </div>
                     </form>
+                    <div className='flex flex-row justify-between gap-2 mt-4'>
+                        <hr className='w-1/2 mt-2 mb-5' />
+                        <span className='text-sm font-medium text-gray-900 dark:text-white'>OR</span>
+                        <hr className='w-1/2 mt-2 mb-5' />
+                    </div>
+                    <GoogleAuth />
                 </div>
             </div>
         </section>
