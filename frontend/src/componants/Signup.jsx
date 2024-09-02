@@ -20,8 +20,8 @@ const Signup = () => {
             axios.post(`${conf.backendUrl}/user/register`, data, { withCredentials: true })
                 .then((res) => {
                     if (res.status === 200) {
-                        navigate('/login');
                         dispatch(login({ userData: res.data }));
+                        navigate('/login');
                     }
                 })
                 .catch((err) => {

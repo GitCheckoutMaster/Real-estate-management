@@ -6,6 +6,7 @@ import conf from '../conf/conf.js';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/userSlice.js';
 import { useState } from 'react';
+import GoogleAuth from './GoogleAuth.jsx';
 
 function Login() {
     const dispatch = useDispatch();
@@ -72,6 +73,12 @@ function Login() {
                                 Dont have an account yet? <Link to="/signup">Create one</Link>
                             </div>
                         </form>
+                        <div className='flex flex-row justify-between gap-2 mt-4'>
+                            <hr className='w-1/2 mt-2' />
+                            <span className='text-sm font-medium text-gray-900 dark:text-white'>OR</span>
+                            <hr className='w-1/2 mt-2' />
+                        </div>
+                        <GoogleAuth />
                     </div>
                 </div>
             </div>

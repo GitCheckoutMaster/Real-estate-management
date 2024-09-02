@@ -2,10 +2,11 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-	const navigate = useNavigate();
+	const status = useSelector((state) => state.auth.status)
+
 	const navItems = [
 		{
 			name: "Home",
@@ -15,12 +16,12 @@ const Header = () => {
 		{
 			name: "Login",
 			path: "/login",
-			active: true,
+			active: status ? false : true,
 		},
 		{
 			name: "Signup",
 			path: "/signup",
-			active: true,
+			active: status ? false : true,
 		},
 	];
 

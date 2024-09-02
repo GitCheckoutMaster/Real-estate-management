@@ -109,7 +109,14 @@ const googleRegister = asyncHandler(async (req, res) => {
     }
     const userExists = await User.findOne({ email });
     if (userExists) {
-        throw new ApiError(403, "User already exists");
+        const { accessToken, refreshToken } = generateTokens(userExists._id);
+        userExists.password = "its hidden nigga!"
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, { httpOnly: true })
+            .cookie("refreshToken", refreshToken, { httpOnly: true })
+            .json(new ApiResponse(200, "Google sign in successfull", userExists));
     }
 
     // generate random password and hash it
