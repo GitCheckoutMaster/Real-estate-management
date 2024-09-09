@@ -4,6 +4,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { WHITELISTED_ADMIN_EMAILS } from "../constants.js";
+import jwt from "jsonwebtoken";
 
 // const generateTokens = asyncHandler(async (userid) => {
 //     const user = await User.findById(userid);
@@ -73,7 +74,7 @@ const register = asyncHandler(async (req, res) => {
         .cookie("refreshToken", refreshToken, { httpOnly: true })
         .cookie("accessToken", accessToken, { httpOnly: true })
         .json(new ApiResponse(200, "User registered successfully", newUser));
-})
+});
 
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -93,7 +94,7 @@ const login = asyncHandler(async (req, res) => {
         throw new ApiError(402, "Invalid credentials");
     }
 
-    const { accessToken, refreshToken } = generateTokens(user._id);
+    const { accessToken, refreshToken } = await generateTokens(user._id);
 
     return res
         .status(200)
@@ -109,7 +110,7 @@ const googleRegister = asyncHandler(async (req, res) => {
     }
     const userExists = await User.findOne({ email });
     if (userExists) {
-        const { accessToken, refreshToken } = generateTokens(userExists._id);
+        const { accessToken, refreshToken } = await generateTokens(userExists._id);
         userExists.password = "its hidden nigga!"
 
         return res
@@ -140,17 +141,63 @@ const googleRegister = asyncHandler(async (req, res) => {
         throw new ApiError(502, "Google registration failed (user not found after creation)");
     }
 
-    const { accessToken, refreshToken } = generateTokens(userCreated._id);
+    const { accessToken, refreshToken } = await generateTokens(userCreated._id);
 
     return res
         .status(200)
         .cookie("accessToken", accessToken, { httpOnly: true })
         .cookie("refreshToken", refreshToken, { httpOnly: true })
         .json(new ApiResponse(200, "Google sign in successfull", userCreated));
-})
+});
+
+const logout = asyncHandler(async (req, res) => {
+    await User.findOneAndUpdate({ _id: req.user._id }, {
+        refreshToken: ""
+    });
+
+    return res
+        .status(200)
+        .clearCookie("accessToken")
+        .clearCookie("refreshToken")
+        .json(
+            new ApiResponse(200, "User logged out successfully")
+        );
+});
+
+const generateAccessToken = asyncHandler(async (req, res) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+        throw new ApiError(400, "Error from generateAccessToken: Refresh token not provided");
+    }
+
+    const decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    if (!decodedToken) {
+        throw new ApiError(401, "Error from generateAccessToken: Invalid refresh token token");
+    }
+
+    const user = await User.findById(decodedToken._id);
+    if (!user) {
+        throw new ApiError(404, "Error from generateAccessToken: User not found");
+    }
+    if (refreshToken != user.refreshToken) {
+        throw new ApiError(405, "Error from generateAccessToken: Refresh token dosen't match");
+    }
+
+    const accessToken = await user.generateAccessToken();
+
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, { httpOnly: true })
+        .cookie("refreshToken", refreshToken, { httpOnly: true })
+        .json(
+            new ApiResponse(200, "Access token generated successfully")
+        )
+});
 
 export {
     register,
     login,
     googleRegister,
+    logout,
+    generateAccessToken,
 }

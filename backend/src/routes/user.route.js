@@ -1,10 +1,15 @@
 import express from 'express';
-import { register, login, googleRegister } from '../controllers/user.controller.js';
+import { register, login, googleRegister, logout, generateAccessToken } from '../controllers/user.controller.js';
+import verifyJWT from '../middlewares/auth.middleware.js';
 
 const userRouter = express.Router();
 
 userRouter.post("/register", register);
 userRouter.post("/login", login);
 userRouter.post("/google-register", googleRegister);
+userRouter.post("/generate-access-token", generateAccessToken);
+
+// secured routes
+userRouter.post('/logout', verifyJWT, logout);
 
 export default userRouter;

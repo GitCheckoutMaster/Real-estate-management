@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import LogoutBtn from "./LogoutBtn.jsx";
 
 const Header = () => {
 	const status = useSelector((state) => state.auth.status)
@@ -48,6 +49,7 @@ const Header = () => {
 								)
 							})
                         }
+						{status && <LogoutBtn />}
 					</ul>
 				</div>
 			</div>

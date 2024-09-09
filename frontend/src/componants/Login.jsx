@@ -7,9 +7,11 @@ import { useDispatch } from 'react-redux';
 import { login } from '../store/userSlice.js';
 import { useState } from 'react';
 import GoogleAuth from './GoogleAuth.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {register, handleSubmit} = useForm();
     const [error, setError] = useState(null);
 
@@ -18,6 +20,7 @@ function Login() {
             .then((res) => {
                 console.log(res.data);
                 dispatch(login({userData: res.data.data}));
+                navigate('/');
                 setError(null);
             })
             .catch((err) => {
