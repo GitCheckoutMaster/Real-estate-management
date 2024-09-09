@@ -16,7 +16,8 @@ function Login() {
     const loginUser = (data) => {
         axios.post(`${conf.backendUrl}/user/login`, data, { withCredentials: true })
             .then((res) => {
-                dispatch(login({userData: res.data}));
+                console.log(res.data);
+                dispatch(login({userData: res.data.data}));
                 setError(null);
             })
             .catch((err) => {

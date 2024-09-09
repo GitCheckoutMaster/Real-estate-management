@@ -22,7 +22,7 @@ const GoogleAuth = () => {
             axios.post(`${conf.backendUrl}/user/google-register`, res.user, { withCredentials: true })
                 .then((res) => {
                     // console.log(res);
-                    dispatch(login({ userData: res.data }))
+                    dispatch(login({ userData: res.data.data }))
                     navigate('/')
                 })
                 .catch((error) => {

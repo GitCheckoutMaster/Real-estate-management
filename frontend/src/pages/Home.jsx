@@ -1,9 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
+import { useSelector } from "react-redux";  
 
 const Home = () => {
+    const userdata = useSelector((state) => state.auth.userData);
     return (
         <div>
             <h1>Home</h1>
+            <h1>user is {userdata?.role}</h1>
         </div>
     )
 }
