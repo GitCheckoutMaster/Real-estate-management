@@ -3,6 +3,15 @@ import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken';
 
+const isTokenExpired = (token) => {
+    if (!token) return true; // No token, treat as expired
+
+    const decoded = jwt.decode(token);
+    const currentTime = Date.now() / 1000; // Convert current time to seconds (Unix time)
+
+    return decoded.exp < currentTime;
+};
+
 const verifyJWT = asyncHandler(async (req, res, next) => {
     const token = req.cookies?.accessToken;
     if (!token) {

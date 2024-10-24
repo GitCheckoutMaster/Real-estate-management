@@ -7,7 +7,8 @@ const Home = () => {
     return (
         <div>
             <h1>Home</h1>
-            <h1>user is {userdata?.role}</h1>
+            <h1>user is {userdata?.isAdmin}</h1>
+            <h1>Data: {userdata?.name} </h1>
         </div>
     )
 }

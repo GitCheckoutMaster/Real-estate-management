@@ -24,6 +24,11 @@ const Header = () => {
 			path: "/signup",
 			active: status ? false : true,
 		},
+		{
+			name: "Profile",
+			path: '/profile/',
+			active: status,
+		}
 	];
 
 	return (

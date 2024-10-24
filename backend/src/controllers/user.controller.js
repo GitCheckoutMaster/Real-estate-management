@@ -55,7 +55,7 @@ const register = asyncHandler(async (req, res) => {
         name: name, 
         email: email,
         password: password,
-        role: WHITELISTED_ADMIN_EMAILS.includes(email) ? "admin": "user",
+        isAdmin: WHITELISTED_ADMIN_EMAILS.includes(email) ? true: false,
     });
 
     if (!user) {
@@ -122,14 +122,13 @@ const googleRegister = asyncHandler(async (req, res) => {
 
     // generate random password and hash it
     const password = Math.random().toString(36).slice(-8);
-    const hashedPass = null;
 
     // generate user and store it
     const user = await User.create({
         email: email,
         name: displayName,
         password: password,
-        role: WHITELISTED_ADMIN_EMAILS.includes(email) ? "admin": "user",
+        isAdmin: WHITELISTED_ADMIN_EMAILS.includes(email) ? true: false,
     })
 
     if (!user) {
