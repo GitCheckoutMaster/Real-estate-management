@@ -1,22 +1,22 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import Header from './componants/Header.jsx'
-import Footer from './componants/Footer.jsx'
+import Header from './components/Header.jsx'
+import Footer from './components/Footer.jsx'
 import { useDispatch } from 'react-redux';
-import Cookie from 'js-cookie';
 import { logout } from './store/userSlice.js';
+import axios from 'axios';
+import conf from './conf/conf.js';
 
 function App() {
-
   const dispatch = useDispatch();
-  const accessToken = Cookie.get('accessToken');
 
-  useEffect(() => {
-    if (accessToken) {
+  axios.interceptors.response.use(response => response, error => {
+    if (error.response && error.response.status === 405) {
       dispatch(logout());
     }
-  }, [accessToken, dispatch])
+    return Promise.reject(error);
+  })
   
   return (
     <>

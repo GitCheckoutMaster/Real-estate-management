@@ -193,10 +193,15 @@ const generateAccessToken = asyncHandler(async (req, res) => {
         )
 });
 
+const getUser = asyncHandler(async (req, res) => {
+    return res.status(200).json(new ApiResponse(200, "User fetched successfully", req.user));
+})
+
 export {
     register,
     login,
     googleRegister,
     logout,
     generateAccessToken,
+    getUser,
 }

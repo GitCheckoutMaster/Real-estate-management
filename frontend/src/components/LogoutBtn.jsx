@@ -12,7 +12,7 @@ const LogoutBtn = () => {
     const logoutHandler = () => {
         axios.post(`${conf.backendUrl}/user/logout`, {}, { withCredentials: true })
             .then((res) => {
-                if (res.status === 200) {
+                if (res.status == 200) {
                     dispatch(logout());
                     navigate("/login");
                 } else {

@@ -15,7 +15,7 @@ const isTokenExpired = (token) => {
 const verifyJWT = asyncHandler(async (req, res, next) => {
     const token = req.cookies?.accessToken;
     if (!token) {
-        throw new ApiError(401, "Unauthorized: Access token not found  (Error from verifyJWT)");
+        throw new ApiError(405, "Unauthorized: Access token not found  (Error from verifyJWT)");
     }
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);

@@ -26,17 +26,17 @@ const Header = () => {
 		},
 		{
 			name: "Profile",
-			path: '/profile/',
+			path: '/profile',
 			active: status,
 		}
 	];
 
 	return (
 		<nav className="bg-white border-gray-200 dark:bg-gray-900">
-			<div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                    <span>Real</span>
-                    <span className="font-bold text-blue-300">Estate</span>
+			<div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4 text-2xl tracking-wider">
+                <span className="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
+                    <span>Aashray</span>
+                    <span className="font-bold text-blue-300">Realty</span>
                 </span>
 				<div className="hidden w-full md:block md:w-auto" id="navbar-default">
 					<ul className="flex px-3 gap-6">
