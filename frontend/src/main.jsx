@@ -12,6 +12,7 @@ import {store, persistor} from './store/store.js'
 import { PersistGate } from 'redux-persist/integration/react'
 import Profile from './components/Profile.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
+import UpdateProfile from './components/UpdateProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
           {
             path: '/profile',
             element: <Profile />
+          },
+          {
+            path: '/updateProfile',
+            element: <UpdateProfile />
           }
         ]
       }

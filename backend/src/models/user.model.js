@@ -23,6 +23,18 @@ const userSchema = new mongoose.Schema({
     refreshToken: {
         type: String,
     },
+    instagramHandle: {
+        type: String
+    },
+    twitterHandle: {
+        type: String
+    },
+    linkedinHandle: {
+        type: String
+    },
+    profileImage: {
+        type: String,
+    }
 }, { timestamps: true });
 
 userSchema.pre("save", async function (next) {
