@@ -6,10 +6,13 @@ import twitter from "../assets/twitter-color-icon.png";
 import gmail from "../assets/gmail-icon.png";
 import linkedin from "../assets/linkedin-app-icon.png";
 import { Link } from "react-router-dom";
-import Card from "./Card.jsx";
+import Card from "../components/Card.jsx";
 import save from "../assets/saved-icon.png";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+
+	const isAdmin = useSelector(state => state.auth.userData.isAdmin);
 
 	const social = [
 		{
@@ -35,15 +38,20 @@ const Profile = () => {
 	]
 
 	return (
-		<div className="bg-gray-900 text-white">
+		<div className=" bg-white text-black">
 			<div className="flex flex-wrap max-w-screen-2xl mx-auto" name="root">
 				<div className="h-full flex flex-wrap flex-col items-start p-4 gap-8" name="profile-page">
 					<div className="h-full flex flex-col gap-8 p-10 mr-10" name="userInfo">
-						<div className="flex flex-col justify-center items-center gap-4" name="profileImage">
-							<img src={luffy} alt="" className="rounded-full h-32 w-3/5" />
-							<span className="text-4xl font-light -tracking-tighter">Jay Mistry</span>
+						<div className="" name="savedList">
+							<h1 name="heading" className="text-4xl font-medium">
+								User Information
+							</h1>
 						</div>
-						<div className="flex flex-col gap-4 text-2xl -tracking-tighter" name="userDetail">
+						<div className="flex flex-col justify-center items-center gap-4" name="profileImage">
+							<img src={luffy} alt="" className="rounded-full h-36 w-3/5" />
+							<span className="text-4xl font-light">Jay Mistry</span>
+						</div>
+						<div className="flex flex-col gap-4 text-2xl" name="userDetail">
 							{
 								social.map((item, index) => {
 									return (
@@ -54,21 +62,31 @@ const Profile = () => {
 									)
 								})
 							}
-							<Link to="/updateProfile" className="bg-blue-400 rounded-md text-center py-0.5 mt-4">Update Profile</Link>
+							<Link to="/updateProfile" className="bg-blue-400 rounded-lg text-center py-2 mt-4 w-full hover:tracking-widest hover:font-medium duration-500">Update Profile</Link>
 						</div>
 					</div>
-					<div className="flex flex-col gap-5" name="savedList">
-						<div className="" name="savedList">
-							<h1 name="heading" className="text-4xl font-light -tracking-tighter">
+					<div className="flex flex-col gap-14" name="savedList">
+						<div className="flex flex-row justify-between" name="savedList">
+							<h1 name="heading" className="text-4xl font-medium">
 								Saved List
 							</h1>
+							{
+								isAdmin &&
+								<Link to="/add-property" className="bg-blue-400 rounded-lg text-center py-2 w-44 max-w-44 hover:tracking-widest hover:font-medium duration-500">Add Property</Link>
+							}
 						</div>
-						<div name="list">
+						<div name="list" className="flex flex-col gap-5">
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
+							<Card />
 							<Card />
 						</div>
 					</div>
 				</div>
-				<div className="text-4xl font-light -tracking-tighter h-full" name="chatBox">
+				<div className="text-4xl font-light h-full" name="chatBox">
 						Chatting is not provided yet
 				</div>
 			</div>

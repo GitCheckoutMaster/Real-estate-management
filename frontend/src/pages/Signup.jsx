@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import SignupComponant from "../componants/Signup";
+import SignupComponent from "../components/Signup.jsx";
 
 const Signup = () => {
     return (
         <div>
-            <SignupComponant />
+            <SignupComponent />
         </div>
     )
 }

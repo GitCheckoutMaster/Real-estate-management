@@ -4,15 +4,17 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Signup from './components/Signup.jsx'
+import Signup from './pages/Signup.jsx'
 import Home from './pages/Home.jsx'
-import Login from './components/Login.jsx'
+import Login from './pages/Login.jsx'
 import { Provider } from 'react-redux'
 import {store, persistor} from './store/store.js'
 import { PersistGate } from 'redux-persist/integration/react'
-import Profile from './components/Profile.jsx'
+import Profile from './pages/Profile.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
-import UpdateProfile from './components/UpdateProfile.jsx'
+import UpdateProfile from './pages/UpdateProfile.jsx'
+import ListPage from './pages/ListPage.jsx'
+import AddProperty from './pages/AddProperty.jsx'
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
         element: <Login />
       },
       {
+        path: '/list',
+        element: <ListPage />
+      },
+      {
         element: <PrivateRoute />,
         children: [
           {
@@ -41,6 +47,10 @@ const router = createBrowserRouter([
           {
             path: '/updateProfile',
             element: <UpdateProfile />
+          },
+          {
+            path: '/add-property',
+            element: <AddProperty />
           }
         ]
       }

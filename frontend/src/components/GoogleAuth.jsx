@@ -35,7 +35,7 @@ const GoogleAuth = () => {
 
     return (
         <div>
-            <button onClick={handleClick} type="button" className='dark:bg-white text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500'>
+            <button onClick={handleClick} type="button" className='dark:bg-white text-xl bg-blue-400 rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500'>
                 <span className='flex gap-4 justify-center'>
                     <FaGoogle className='h-7' />
                     <span className='flex items-center pb-1'>CONTINUE WITH GOOGLE</span>

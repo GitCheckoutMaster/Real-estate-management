@@ -3,8 +3,9 @@ import User from "../models/user.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { WHITELISTED_ADMIN_EMAILS } from "../constants.js";
+import { ROOT_ADMIN, WHITELISTED_ADMIN_EMAILS } from "../constants.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 // const generateTokens = asyncHandler(async (userid) => {
 //     const user = await User.findById(userid);
@@ -38,6 +39,17 @@ async function generateTokens(userid) {
     return { accessToken, refreshToken };
 }
 
+async function generateRandomToken(userid) {
+    const user = await User.findById(userid);
+    if (!user) {
+        throw new ApiError(500, "User not found while generating random token");
+    }
+
+    const randomToken = await user.generateRandomToken();
+
+    return randomToken;
+}
+
 const register = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -56,6 +68,7 @@ const register = asyncHandler(async (req, res) => {
         email: email,
         password: password,
         isAdmin: WHITELISTED_ADMIN_EMAILS.includes(email) ? true: false,
+        canAdd: ROOT_ADMIN === email ? true: false,
     });
 
     if (!user) {
@@ -73,6 +86,7 @@ const register = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("refreshToken", refreshToken, { httpOnly: true })
         .cookie("accessToken", accessToken, { httpOnly: true })
+        .cookie("token", generateRandomToken(newUser._id))
         .json(new ApiResponse(200, "User registered successfully", newUser));
 });
 
@@ -100,6 +114,7 @@ const login = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("accessToken", accessToken, { httpOnly: true })
         .cookie("refreshToken", refreshToken, { httpOnly: true })
+        .cookie("token", generateRandomToken(user._id))
         .json(new ApiResponse(200, "User logged in successfully", user));
 });
 
@@ -111,13 +126,14 @@ const googleRegister = asyncHandler(async (req, res) => {
     const userExists = await User.findOne({ email });
     if (userExists) {
         const { accessToken, refreshToken } = await generateTokens(userExists._id);
-        userExists.password = "its hidden nigga!"
+        userExists.password = "its hidden nigga"
 
         return res
             .status(200)
             .cookie("accessToken", accessToken, { httpOnly: true })
             .cookie("refreshToken", refreshToken, { httpOnly: true })
-            .json(new ApiResponse(200, "Google sign in successfull", userExists));
+            .cookie("token", generateRandomToken(userExists._id))
+            .json(new ApiResponse(200, "Google sign in successful", userExists));
     }
 
     // generate random password and hash it
@@ -129,6 +145,7 @@ const googleRegister = asyncHandler(async (req, res) => {
         name: displayName,
         password: password,
         isAdmin: WHITELISTED_ADMIN_EMAILS.includes(email) ? true: false,
+        canAdd: ROOT_ADMIN === email ? true : false,
     })
 
     if (!user) {
@@ -146,7 +163,8 @@ const googleRegister = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("accessToken", accessToken, { httpOnly: true })
         .cookie("refreshToken", refreshToken, { httpOnly: true })
-        .json(new ApiResponse(200, "Google sign in successfull", userCreated));
+        .cookie("token", generateRandomToken())
+        .json(new ApiResponse(200, "Google sign in successful", userCreated));
 });
 
 const logout = asyncHandler(async (req, res) => {
@@ -158,6 +176,7 @@ const logout = asyncHandler(async (req, res) => {
         .status(200)
         .clearCookie("accessToken")
         .clearCookie("refreshToken")
+        .clearCookie("token")
         .json(
             new ApiResponse(200, "User logged out successfully")
         );
@@ -179,7 +198,7 @@ const generateAccessToken = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Error from generateAccessToken: User not found");
     }
     if (refreshToken != user.refreshToken) {
-        throw new ApiError(405, "Error from generateAccessToken: Refresh token dosen't match");
+        throw new ApiError(405, "Error from generateAccessToken: Refresh token doesn't match");
     }
 
     const accessToken = await user.generateAccessToken();

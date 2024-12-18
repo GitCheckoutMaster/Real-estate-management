@@ -15,6 +15,11 @@ const Header = () => {
 			active: true,
 		},
 		{
+			name: "Projects",
+			path: "/list",
+			active: true
+		},
+		{
 			name: "Login",
 			path: "/login",
 			active: status ? false : true,
@@ -28,13 +33,13 @@ const Header = () => {
 			name: "Profile",
 			path: '/profile',
 			active: status,
-		}
+		},
 	];
 
 	return (
-		<nav className="bg-white border-gray-200 dark:bg-gray-900">
-			<div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4 text-2xl tracking-wider">
-                <span className="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
+		<nav className="bg-gray-50 border-gray-200 text-black">
+			<div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4 text-lg tracking-wider">
+                <span className="self-center text-4xl font-semibold whitespace-nowrap">
                     <span>Aashray</span>
                     <span className="font-bold text-blue-300">Realty</span>
                 </span>
@@ -47,7 +52,7 @@ const Header = () => {
 								}
                                 return (
 									<li key={index}>
-										<Link to={item.path} className="text-white hover:text-blue-500">
+										<Link to={item.path} className="hover:text-blue-500">
 											{item.name}
 										</Link>
                                 	</li>

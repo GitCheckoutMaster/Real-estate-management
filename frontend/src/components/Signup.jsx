@@ -26,7 +26,7 @@ const Signup = () => {
                 })
                 .catch((err) => {
                     console.log(err);
-                    setError(err.response.status);
+                    setError(err.response.data.status);
                 })
         } catch (err) {
             console.log(err)
@@ -34,12 +34,12 @@ const Signup = () => {
     }
 
     return (
-        <section className='bg-gray-50 dark:bg-gray-900'>
+        <section className='bg-gray-100 dark:bg-gray-900'>
             <div className='flex flex-col gap-2 items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
-                <Link to="/">
-                    <span className='text-4xl font-semibold text-white'>Real</span>
-                    <span className='text-4xl font-bold text-blue-300'>Estate</span>
-                </Link>
+                {/* <Link to="/">
+                    <span className='text-4xl font-semibold text-white'>Aashray</span>
+                    <span className='text-4xl font-bold text-blue-300'>Realty</span>
+                </Link> */}
                 <div className='w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700'>
                     <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
                         Create an Account
@@ -53,18 +53,18 @@ const Signup = () => {
                     <form onSubmit={handleSubmit(submitHandler)} className='space-y-4 md:space-y-6'>
                         <div>
                             <label className='block mb-2 mt-6 text-sm font-medium text-gray-900 dark:text-white'>Name</label>
-                            <input {...register("name", { required: true })} type="text" className='bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg w-full focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='Jay Mistry' />
+                            <input {...register("name", { required: true })} type="text" className='bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg w-full focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='Jay Mistry' />
                         </div>
                         <div>
                             <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6'>Your email</label>
-                            <input {...register("email", { required: true })} type="email" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='name@company.com' />
+                            <input {...register("email", { required: true })} type="email" className='bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='name@company.com' />
                         </div>
                         <div>
                             <label className='block mb-2 mt-6 text-sm font-medium text-gray-900 dark:text-white'>Your password</label>
-                            <input {...register("password", { required: true })} type="password" className='bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg w-full focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='••••••••' />
+                            <input {...register("password", { required: true })} type="password" className='bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg w-full focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500' placeholder='••••••••' />
                         </div>
                         <div>
-                            <button type="submit" className='dark:bg-blue-500 text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
+                            <button type="submit" className='bg-blue-400 text-xl rounded-lg w-full p-2.5 tracking-tighter hover:tracking-widest hover:font-semibold hover:duration-500 duration-500 mt-4'>SUBMIT</button>
                         </div>
                     </form>
                     <div className='flex flex-row justify-between gap-2 mt-4'>
